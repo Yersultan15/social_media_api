@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Instagram</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form {
+            text-align: center;
+            margin-top: 50px;
+            max-width: 800px; /* Adjusted max-width for better display */
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        .item-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .result-info {
+            text-align: left;
+            max-width: 300px;
+            margin: 10px;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .result-info:hover {
+            transform: scale(1.05);
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+    </style>
+    <title>Posts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../history.css">
+</head>
+
+<body class="body">
+<nav class="navbar navbar-expand-lg navbar-dark bg-custom fixed-top">
+    <a class="navbar-brand" href="/instagram">Post Instagram</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/tiktok">Tik tok</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/instagram">Instagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/quiz/start">Bonus</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/history2">History Instagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/history">History Tik tok</a>
+            </li>
+            <div id="google_translate_element"></div>
+
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({ pageLanguage: '<%= req.getLocale() %>' }, 'google_translate_element');
+                }
+            </script>
+
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+
+        <% if (req.session.user) { %>
+                <!-- Display the username if the user is logged in -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Welcome, <%= req.session.user.name %>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/">Log Out</a>
+                        <!-- Add other dropdown items if needed -->
+                    </div>
+                </li>
+            <% } else { %>
+                <!-- Display the login link if the user is not logged in -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Login</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+
+<div class="form" style="margin-top: 200px">
+    <h1>Posts</h1>
+    <% if (items.length > 0) { %>
+        <div class="item-list">
+            <% items.forEach(item => { %>
+                <div class="result-info">
+                    <h2><%= item.name.en %></h2>
+                    <p><strong>Description:</strong> <%= item.description.en %></p>
+
+                    <!-- Display creation timestamp -->
+                    <p><strong>Created At:</strong> <%= item.createdAt ? item.createdAt.toLocaleString() : 'N/A' %></p>
+                    <!-- Display update timestamp -->
+                    <p><strong>Updated At:</strong> <%= item.updatedAt ? item.updatedAt.toLocaleString() : 'N/A' %></p>
+
+                    <!-- Check if the item has images and display them -->
+                    <% if (item.images && item.images.length > 0) { %>
+                        <!-- Carousel container -->
+                        <div id="carousel<%= item._id %>" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <% item.images.forEach((image, index) => { %>
+                                    <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                        <img src="<%= image %>" class="d-block w-100" alt="Item Image">
+                                    </div>
+                                <% }); %>
+                            </div>
+                            <!-- Carousel controls -->
+                            <a class="carousel-control-prev" href="#carousel<%= item._id %>" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel<%= item._id %>" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+                        <!-- Display edit and delete links for admins -->
+                        <% if (req.session.user && req.session.user.isAdmin) { %>
+                            <a href="/items/edit/<%= item._id %>">Edit</a>
+                            <a href="/items/delete/<%= item._id %>">Delete</a>
+                        <% } %>
+                    <% } %>
+
+
+                    <!-- Add more details as needed based on your item schema -->
+                </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <p>No items available.</p>
+    <% } %>
+
+    <a href="/items">Back to Add Item</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

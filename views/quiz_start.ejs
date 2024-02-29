@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Quiz</title>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0" nonce="your_nonce"></script>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="https://platform.linkedin.com/in.js" type="text/javascript">lang: en_US</script>
+
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../history.css"> <!-- You can create a separate CSS file for quiz styling -->
+    <script>
+        // Function to start the countdown timer
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                // Update the hidden input field with the timer value
+                document.getElementById("timerInput").value = timer;
+
+                if (--timer < 0) {
+                    // Automatically submit the form when the timer runs out
+                    document.getElementById("quizForm").submit();
+                }
+            }, 1000);
+        }
+
+        // Execute the countdown timer when the page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            var quizDuration = 300; // Set the quiz duration in seconds (300 seconds = 5 minutes)
+            var display = document.querySelector('#timer');
+            startTimer(quizDuration, display);
+        });
+    </script>
+</head>
+
+
+<body class="body">
+<nav class="navbar navbar-expand-lg navbar-dark bg-custom fixed-top">
+    <a class="navbar-brand" href="/instagram">Instagram QUIZ</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/tiktok">Tik tok</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/instagram">Instagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/history2">History Instagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/history">History Tik tok</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/itemsList">Posts</a>
+            </li>
+            <% var req;
+            if (req && req.session && req.session.user) { %>
+                <!-- Display the username if the user is logged in -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#!">Welcome, <%= req.session.user.name %></a>
+                </li>
+            <% } else { %>
+                <!-- Display the login link if the user is not logged in -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Login</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+
+<div class="form" style="margin-top: 200px;">
+    <h1>Quiz Start</h1>
+
+    <!-- Display quiz result here -->
+    <% var quizResult;
+    function formatTime(minutes, seconds) {
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+    if (quizResult) { %>
+        <div>
+            <div>
+                <p>Your Score: <%= quizResult.score %></p>
+                <p>Total Questions: <%= quizResult.totalQuestions %></p>
+                <p><%= quizResult.feedback %></p>
+                <% if (quizResult.timeTaken) { %>
+                    <!-- Display time taken in the desired format -->
+                    <p>Time Taken: <%= formatTime(quizResult.timeTaken.minutes, quizResult.timeTaken.seconds) %></p>
+                <% } %>
+            <p>Share your quiz results:</p>
+
+            <!-- Facebook Share Button -->
+            <div class="fb-share-button" data-href="your_quiz_url" data-layout="button_count" data-size="small">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=your_quiz_url&src=sdkpreparse" class="fb-xfbml-parse-ignore">Share on Facebook</a>
+            </div>
+
+            <!-- Twitter Share Button -->
+            <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Check%20out%20my%20quiz%20results%20at%20your_quiz_url" data-size="small">Tweet</a>
+
+            <!-- LinkedIn Share Button -->
+            <script type="IN/Share" data-url="your_quiz_url" data-counter="right"></script>
+        </div>
+        </div>
+    <% } else { %>
+        <p>Time Remaining: <span id="timer">05:00</span></p>
+
+        <!-- Quiz Questions and Options -->
+        <form id="quizForm" action="/quiz_start" method="post">
+            <!-- Question 1 -->
+            <div class="form-group">
+                <label for="question1">Question 1: What year was Instagram launched?</label>
+                <input type="radio" name="question1" value="2010"> 2010
+                <input type="radio" name="question1" value="2012"> 2012
+                <input type="radio" name="question1" value="2014"> 2014
+                <input type="radio" name="question1" value="2016"> 2016
+            </div>
+
+            <!-- Question 2 -->
+            <div class="form-group">
+                <label for="question2">Question 2: Who is the current CEO of Instagram?</label>
+                <input type="radio" name="question2" value="Mark Zuckerberg"> Mark Zuckerberg
+                <input type="radio" name="question2" value="Kevin Systrom"> Kevin Systrom
+                <input type="radio" name="question2" value="Adam Mosseri"> Adam Mosseri
+                <input type="radio" name="question2" value="Mike Krieger"> Mike Krieger
+            </div>
+
+            <!-- Question 3 -->
+            <div class="form-group">
+                <label for="question3">Question 3: How many users does Instagram have as of 2022?</label>
+                <input type="radio" name="question3" value="500 million"> 500 million
+                <input type="radio" name="question3" value="1 billion"> 1 billion
+                <input type="radio" name="question3" value="2 billion"> 2 billion
+                <input type="radio" name="question3" value="3 billion"> 3 billion
+            </div>
+
+            <!-- Question 4 -->
+            <div class="form-group">
+                <label for="question4">Question 4: What company owns Instagram?</label>
+                <input type="radio" name="question4" value="Facebook"> Facebook
+                <input type="radio" name="question4" value="Twitter"> Twitter
+                <input type="radio" name="question4" value="Google"> Google
+                <input type="radio" name="question4" value="Snap Inc."> Snap Inc.
+            </div>
+
+            <!-- Question 5 -->
+            <div class="form-group">
+                <label for="question5">Question 5: Which feature allows users to share photos and videos that disappear
+                    after 24 hours?</label>
+                <input type="radio" name="question5" value="Instagram Stories"> Instagram Stories
+                <input type="radio" name="question5" value="IGTV"> IGTV
+                <input type="radio" name="question5" value="Reels"> Reels
+                <input type="radio" name="question5" value="Explore"> Explore
+            </div>
+
+            <!-- Hidden input field for timer -->
+            <input type="hidden" name="timer" id="timerInput" value="">
+
+            <button type="submit">Submit Quiz</button>
+        </form>
+    <% } %>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // Function to format time as 00:00:00
+    function formatTime(minutes, seconds) {
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome",
+  "enterUsername": "Enter Instagram Username",
+  "getInfo": "Get Instagram Info",
+  "userId": "User ID",
+  "userName": "User name",
+  "isPrivate": "Is Private",
+  "fullName": "Full Name",
+  "userBiography": "User biography",
+  "externalURL": "External URL",
+  "isVerified": "Is Verified",
+  "noInfoAvailable": "No Instagram User Info available for the provided username."
+}

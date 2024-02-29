@@ -1,0 +1,14 @@
+{
+	"welcome": "Добро пожаловать",
+	"enterUsername": "Введите имя пользователя Instagram",
+	"getInfo": "Получить информацию Instagram",
+	"userId": "Идентификатор пользователя",
+	"userName": "Имя пользователя",
+	"isPrivate": "Приватный аккаунт",
+	"fullName": "Полное имя",
+	"userBiography": "Биография пользователя",
+	"externalURL": "Внешний URL",
+	"isVerified": "Верифицирован",
+	"noInfoAvailable": "Нет информации о пользователе Instagram для предоставленного имени пользователя.",
+	"ru": "ru"
+}

@@ -1,0 +1,193 @@
+<!-- views/instagram.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tik tok</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form {
+            text-align: center;
+            margin-top: 50px;
+            max-width: 400px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        .result-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .result-info {
+            text-align: left;
+            max-width: 250px;
+            margin: 10px;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .result-info:hover {
+            transform: scale(1.05);
+        }
+    </style>
+
+    <title>Instagram</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../history.css">
+</head>
+
+<body class="body">
+<nav class="navbar navbar-expand-lg navbar-dark bg-custom fixed-top">
+    <a class="navbar-brand" href="/instagram">Tik tok</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/instagram">Instagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/quiz/start">Bonus</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/history2">History Instagram</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/history">History Tik tok</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/itemsList">Item List</a>
+            </li>
+            <div id="google_translate_element"></div>
+
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({ pageLanguage: '<%= req.getLocale() %>' }, 'google_translate_element');
+                }
+            </script>
+
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+
+        <% if (req.session.user) { %>
+                <!-- Display the username if the user is logged in -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Welcome, <%= req.session.user.name %>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/">Log Out</a>
+                        <!-- Add other dropdown items if needed -->
+                    </div>
+                </li>
+            <% } else { %>
+                <!-- Display the login link if the user is not logged in -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Login</a>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="form" style="margin-top: 200px;">
+    <h1>TikTok</h1>
+    <img src="/img/vectorsart_33965.png" alt="" style="max-width: 100%; height: auto;">
+
+    <form action="/download-tiktok-video" method="post">
+        <label for="tiktok-video-link">Enter TikTok Video Link:</label>
+        <input type="text" id="tiktok-video-link" name="tiktok-video-link" value="<%= req.session.tikTokVideoLink || '' %>" required>
+        <button type="submit">Get TikTok Video Info</button>
+        <p id="loading-message" style="display: none;">Fetching video info...</p>
+    </form>
+
+    <% var tikTokVideoInfo;
+    if (tikTokVideoInfo && tikTokVideoInfo.no_watermark_video_link) { %>
+        <!-- Add a hidden input field to store the video link -->
+        <input type="hidden" id="hidden-video-link" name="hidden-video-link" value="<%= tikTokVideoInfo.no_watermark_video_link %>">
+
+        <!-- Display a message instead of the actual link -->
+        <p>Video Link without Watermark: Video link is hidden.</p>
+
+        <!-- Add a download button with an onclick event -->
+        <button class="download-button" type="button" onclick="downloadVideo()">Download Video</button>
+    <% } else { %>
+        <p>No TikTok Video Info available for the provided link.</p>
+    <% } %>
+</div>
+
+<script>
+    function getTikTokVideoInfo() {
+        // Hide the input field and button
+        document.getElementById('tiktok-video-link').style.display = 'none';
+        document.querySelector('button[type="button"]').style.display = 'none';
+        // Show the loading message
+        document.getElementById('loading-message').style.display = 'block';
+
+        // Continue with the form submission
+        document.getElementById('tiktok-form').submit();
+    }
+    function downloadVideo() {
+        // Get the video link from the hidden input field
+        const videoLink = document.getElementById('hidden-video-link').value;
+
+        // Fetch the video data
+        fetch(videoLink)
+            .then(response => response.blob())
+            .then(blob => {
+                // Create a Blob URL
+                const blobUrl = URL.createObjectURL(blob);
+
+                // Create an anchor element
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'downloaded_video.mp4';
+
+                // Simulate a click on the anchor element
+                a.click();
+
+                // Remove the anchor element
+                document.body.removeChild(a);
+            })
+            .catch(error => {
+                console.error('Error downloading video:', error);
+                // Handle errors if needed
+            });
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

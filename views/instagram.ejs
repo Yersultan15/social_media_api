@@ -1,0 +1,166 @@
+    <!-- views/instagram.ejs -->
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://cdn.jsdelivr.net/npm/i18n-iso-countries@5.0.3/i18n-iso-countries.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Instagram</title>
+            <style>
+                body {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                }
+
+                .form {
+                    text-align: center;
+                    margin-top: 50px;
+                    max-width: 400px;
+                    width: 100%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    padding: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                }
+
+                h1,
+                h2 {
+                    text-align: center;
+                }
+
+                .result-container {
+                    display: flex;
+                    justify-content: space-around;
+                    margin-top: 20px;
+                }
+
+                .result-info {
+                    text-align: left;
+                    max-width: 250px;
+                    margin: 10px;
+                    padding: 20px;
+                    border: 2px solid #3498db;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s;
+                }
+
+                .result-info:hover {
+                    transform: scale(1.05);
+                }
+
+            </style>
+
+        <title>Instagram</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../history.css">
+    </head>
+
+    <body class="body">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-custom fixed-top">
+        <a class="navbar-brand" href="/instagram">Instagram</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/tiktok">Tik tok</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/quiz/start">Bonus</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/history2">History Instagram</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/history">History Tik tok</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/itemsList">Posts</a>
+                </li>
+                <div class="dropdown">
+
+                </div>
+                <div id="google_translate_element"></div>
+
+                <script type="text/javascript">
+                    function googleTranslateElementInit() {
+                        new google.translate.TranslateElement({ pageLanguage: '<%= req.getLocale() %>' }, 'google_translate_element');
+                    }
+                </script>
+
+                <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+                <% if (req.session.user) { %>
+                    <!-- Display the username if the user is logged in -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Welcome, <%= req.session.user.name %>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/">Log Out</a>
+                            <!-- Add other dropdown items if needed -->
+                        </div>
+                    </li>
+                <% } else { %>
+                    <!-- Display the login link if the user is not logged in -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Login</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="form" style="margin-top: 200px;">
+        <h1>Instagram</h1>
+        <img src="/img/Instagram-Logo.wine.png" alt="" style="max-width: 100%; height: auto;">
+
+        <form action="/get-instagram-info" method="post">
+            <label for="instagram-username">Enter Instagram Username:</label>
+            <input type="text" id="instagram-username" name="instagram-username" value="" required>
+            <button type="submit">Get Instagram Info</button>
+        </form>
+
+        <!-- Display the Instagram User Info result here if needed -->
+        <% var instagramUserInfo;
+        if (instagramUserInfo) { %>
+            <div class="result-container">
+                <div class="result-info">
+                    <p><strong>User ID:</strong> <%= instagramUserInfo.id || 'Not available' %></p>
+                    <p><strong>User name:</strong> <%= instagramUserInfo.username || 'Not available' %></p>
+                    <p><strong>Is Private:</strong> <%= instagramUserInfo.is_private !== undefined ? instagramUserInfo.is_private : 'Not available' %></p>
+                    <p><strong>Full Name:</strong> <%= instagramUserInfo.full_name %></p>
+                </div>
+                <div class="result-info">
+                    <p><strong>User biography:</strong> <%= instagramUserInfo.biography || 'Not available' %></p>
+                    <p><strong>External URL:</strong> <%= instagramUserInfo.external_url || 'Not available' %></p>
+                    <p><strong>Is Verified:</strong> <%= instagramUserInfo.is_verified !== undefined ? instagramUserInfo.is_verified : 'Not available' %></p>
+                </div>
+                <!-- Add more result-info divs as needed -->
+            </div>
+
+    <% } else { %>
+            <p>No Instagram User Info available for the provided username.</p>
+        <% } %>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+
+    </html>

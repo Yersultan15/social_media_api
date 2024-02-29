@@ -1,0 +1,13 @@
+{
+  "welcome": "Қош келдіңіздерге",
+  "enterUsername": "Instagram пайдаланушы атын енгізіңіз",
+  "getInfo": "Instagram ақпаратын алу",
+  "userId": "Пайдаланушы идентификаторы",
+  "userName": "Пайдаланушы аты",
+  "isPrivate": "Жеке аккаунт",
+  "fullName": "Толық аты",
+  "userBiography": "Пайдаланушы биографиясы",
+  "externalURL": "Сыртқы URL",
+  "isVerified": "Расталған",
+  "noInfoAvailable": "Көрсетілген пайдаланушы аты үшін Instagram пайдаланушы ақпараты жоқ."
+}
